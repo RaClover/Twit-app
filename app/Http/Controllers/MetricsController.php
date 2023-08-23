@@ -22,6 +22,8 @@ class MetricsController extends Controller
         DB::connection()->enableQueryLog();
         $collectorRegistry = app(CollectorRegistry::class);
 
+
+
         //memory usage metric
         $memoryUsage = memory_get_usage(true);
         $gauge = $collectorRegistry->getOrRegisterGauge('app', 'memory_usage_bytes', 'Memory usage in bytes');
