@@ -18,6 +18,7 @@ services:
             - prometheus
             - mailhog
 
+
     nginx:
         image: nginx:latest
         container_name: nginx
