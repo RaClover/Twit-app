@@ -115,7 +115,6 @@ class MetricsController extends Controller
         );
         $cacheMissesCounter->incBy($cacheMisses);
 
-
         $renderer = new RenderTextFormat();
         $result = $renderer->render($collectorRegistry->getMetricFamilySamples());
 
