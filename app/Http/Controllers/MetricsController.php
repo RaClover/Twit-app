@@ -14,15 +14,10 @@ use Prometheus\RenderTextFormat;
 
 class MetricsController extends Controller
 {
-
-
     public function getMetrics(Request $request)
     {
-
         DB::connection()->enableQueryLog();
         $collectorRegistry = app(CollectorRegistry::class);
-
-
 
         //memory usage metric
         $memoryUsage = memory_get_usage(true);
@@ -47,7 +42,6 @@ class MetricsController extends Controller
         );
         $twitsCounter->set($twitsCount);
 
-
         // Count the number of comments posted on Twits
         $commentsCount = Comment::count();
         $commentsCounter = $collectorRegistry->getOrRegisterGauge(
@@ -65,7 +59,6 @@ class MetricsController extends Controller
             'Total number of likes'
         );
         $likesCounter->set($likesCount);
-
 
         // Count the number of Twit deletions
         $twitDeletionsCount = Twit::onlyTrashed()->count();
@@ -121,18 +114,6 @@ class MetricsController extends Controller
             'Total number of cache misses'
         );
         $cacheMissesCounter->incBy($cacheMisses);
-
-
-
-
-//        $exceptionRate = $this->getExceptionRate();
-//        $exceptionRateGauge = $collectorRegistry->getOrRegisterGauge(
-//            'app',
-//            'exception_rate',
-//            'Exception rate per minute'
-//        );
-//        $exceptionRateGauge->set($exceptionRate);
-
 
 
         $renderer = new RenderTextFormat();
