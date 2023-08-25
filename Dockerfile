@@ -1,3 +1,4 @@
+# Use the base image for PHP setup
 FROM php:8.2.0-fpm
 
 # Install system dependencies
@@ -35,3 +36,4 @@ RUN composer install
 
 # Install Node.js dependencies and build assets
 RUN npm install
+
