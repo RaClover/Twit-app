@@ -18,6 +18,7 @@ jobs:
       - name: Run Tests
         run: php artisan test
 
+
       # Code Coverage
       - name: Install and Configure XDebug
         run: |
