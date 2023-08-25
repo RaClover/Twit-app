@@ -43,6 +43,7 @@ RUN composer install
 # Install Node.js dependencies and build assets
 RUN npm install
 
+
 # Stage 2: Add Telegram Notification
 FROM appleboy/drone-telegram:1.3.9-linux-amd64
 
