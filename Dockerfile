@@ -10,7 +10,13 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libpng-dev \
     curl \
-    && docker-php-ext-install zip pdo_mysql pdo_pgsql
+    && docker-php-ext-install zip pdo_mysql pdo_pgsql \
+
+# Install XDebug and other extensions
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install GD extension
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
