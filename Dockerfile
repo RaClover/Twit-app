@@ -17,8 +17,9 @@ RUN apt-get update && apt-get install -y \
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-# Copy custom xdebug configuration
-COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+# Configure XDebug
+RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install GD extension
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
