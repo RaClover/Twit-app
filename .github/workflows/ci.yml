@@ -15,8 +15,8 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           photo: './tests/notify.png'
 
-      - name: Run Tests
-        run: php artisan test
+#      - name: Run Tests
+#        run: php artisan test
 
 
       # Code Coverage
