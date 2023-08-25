@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y \
 
 # Install XDebug and other extensions
 RUN pecl install xdebug \
-    && apt-get install -y php-dev \
     && docker-php-ext-enable xdebug \
     && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
