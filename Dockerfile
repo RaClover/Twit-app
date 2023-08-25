@@ -1,5 +1,4 @@
-# Stage 1: Build Application
-FROM php:8.2.0-fpm as app
+FROM php:8.2.0-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -10,16 +9,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libpng-dev \
     curl \
-    && docker-php-ext-install zip pdo_mysql pdo_pgsql \
-
-
-# Install XDebug and other extensions
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-
-# Configure XDebug
-RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    && docker-php-ext-install zip pdo_mysql pdo_pgsql
 
 # Install GD extension
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -45,14 +35,3 @@ RUN composer install
 
 # Install Node.js dependencies and build assets
 RUN npm install
-
-
-# Stage 2: Add Telegram Notification
-FROM appleboy/drone-telegram:1.3.9-linux-amd64
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-WORKDIR /github/workspace
-
-ENTRYPOINT ["/entrypoint.sh"]

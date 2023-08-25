@@ -15,6 +15,7 @@ services:
             - .:/var/www/html
         depends_on:
             - mysql
+            - prometheus
             - mailhog
 
 
@@ -41,66 +42,60 @@ services:
         volumes:
             - twit_mysql_data:/var/lib/mysql
 
-#    prometheus:
-#        image: prom/prometheus
-#        container_name: prometheus
-#        ports:
-#            - "9090:9090"
-#        volumes:
-#            - ./prometheus:/etc/prometheus
-#            - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-#            - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
-#            - ./prometheus/blackbox.yml:/etc/prometheus/blackbox.yml
-#        command:
-#            - --config.file=/etc/prometheus/prometheus.yml
-#        depends_on:
-#            - node-exporter
-#            - blackbox-exporter
-#            - mysql-exporter
+    prometheus:
+        image: prom/prometheus
+        container_name: prometheus
+        ports:
+            - "9090:9090"
+        volumes:
+            - ./prometheus:/etc/prometheus
+            - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
+            - ./prometheus/blackbox.yml:/etc/prometheus/blackbox.yml
+        command:
+            - --config.file=/etc/prometheus/prometheus.yml
+        depends_on:
+            - node-exporter
+            - blackbox-exporter
+            - mysql-exporter
 
-#    alertmanager:
-#        image: prom/alertmanager
-#        container_name: alertmanager
-#        ports:
-#            - "9093:9093"
-#        volumes:
-#            - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-#
-#    node-exporter:
-#        image: prom/node-exporter
-#        container_name: node-exporter
-#        ports:
-#            - "9100:9100"
-#
-#    blackbox-exporter:
-#        image: bitnami/blackbox-exporter
-#        volumes:
-#            - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml
-#        container_name: blackbox-exporter
-#        ports:
-#            - "9115:9115"
-#
-#    mysql-exporter:
-#        image: prom/mysqld-exporter
-#        container_name: mysql-exporter
-#        ports:
-#            - "9104:9104"
-#        environment:
-#            DATA_SOURCE_NAME: "root:mysecretpassword@(mysql:3306)/Twit"
-#        command:
-#            - "--config.my-cnf=/etc/my.cnf"
-#        volumes:
-#            - ./my.cnf:/etc/my.cnf
-#
-#
-#
-#    grafana:
-#        image: grafana/grafana
-#        container_name: grafana
-#        ports:
-#            - "3000:3000"
-#        depends_on:
-#            - prometheus
+
+
+    node-exporter:
+        image: prom/node-exporter
+        container_name: node-exporter
+        ports:
+            - "9100:9100"
+
+    blackbox-exporter:
+        image: bitnami/blackbox-exporter
+        volumes:
+            - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml
+        container_name: blackbox-exporter
+        ports:
+            - "9115:9115"
+
+    mysql-exporter:
+        image: prom/mysqld-exporter
+        container_name: mysql-exporter
+        ports:
+            - "9104:9104"
+        environment:
+            DATA_SOURCE_NAME: "root:mysecretpassword@(mysql:3306)/Twit"
+        command:
+            - "--config.my-cnf=/etc/my.cnf"
+        volumes:
+            - ./my.cnf:/etc/my.cnf
+
+
+
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        ports:
+            - "3000:3000"
+        depends_on:
+            - prometheus
 
     mailhog:
         image: mailhog/mailhog
