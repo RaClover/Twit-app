@@ -15,14 +15,27 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           photo: './tests/notify.png'
 
+      - name: Run Tests
+        run: php artisan test
 
-      - name: Build and Push Docker Image
+      # Code Coverage
+      - name: Install and Configure XDebug
         run: |
-          docker-compose build
-          echo ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker-compose push
-        env:
-          DOCKER_BUILDKIT: 1
+          pecl install xdebug
+          echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
+          echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini
+          echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+      - name: Run Tests with Code Coverage
+        run: php artisan test --coverage-clover coverage.xml
+
+
+      # Upload Code Coverage Report as Artifact
+      - name: Upload Code Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage
+          path: coverage.xml
 
 
       # Linting and Code Analysis
@@ -37,9 +50,18 @@ jobs:
           tar zxvf trivy_0.21.0_Linux-64bit.tar.gz
           sudo mv trivy /usr/local/bin/
 
+
+      - name: Build and Push Docker Image
+        run: |
+          docker-compose build
+          echo ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker-compose push
+        env:
+          DOCKER_BUILDKIT: 1
+
+
       - name: Scan Container Image
         run: trivy image ${{ secrets.DOCKERHUB_USERNAME }}/twit:latest\
-
 
 
 
