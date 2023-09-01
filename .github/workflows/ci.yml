@@ -50,7 +50,7 @@ jobs:
             ✅ **Pipeline Completed Successfully!**
             New push on branch: `${{ github.ref }}`
             Commit Message: `${{ github.event.head_commit.message }}`
-            *Check out the GitHub repository ` (https://github.com/RaClover/TwitAppWithPrometheusMonitoring) for more details.*
+            *Check out the GitHub repository ` (https://github.com/RaClover/Twit-app) for more details.*
 
       - name: Send Notification on Failure
         if: failure()
@@ -62,6 +62,6 @@ jobs:
             ❌ **Pipeline Failed!**
             New push on branch: `${{ github.ref }}`
             Commit Message: `${{ github.event.head_commit.message }}`
-            *Check out the GitHub repository ` (https://github.com/RaClover/TwitAppWithPrometheusMonitoring) for more details.*
+            *Check out the GitHub repository ` (https://github.com/RaClover/Twit-app) for more details.*
 
 
