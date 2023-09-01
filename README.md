@@ -198,6 +198,7 @@ export GITHUB="true"
 ![](public/Images/action-4.jpg)
 ![](public/Images/action-5.jpg)
 ![](public/Images/action-6.jpg)
+![](public/Images/action-7.jpg)
 
 # Объяснение
 <h3>. Prometheus </h3> 
